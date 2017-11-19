@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/tunelScene.unity
+- path: Assets/czesc1.unity
   isLoaded: 1
   isActive: 1
