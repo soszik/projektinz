@@ -5,7 +5,12 @@ using UnityEngine;
 public class MasterScript : MonoBehaviour {
 
     private List<GameObject> Puzzles;
-
+    enum Mode
+    {
+        Tunnel,
+        OpenSpace
+    }
+    private Mode environment = Mode.Tunnel;
     void loadXml()
     {
         //TODO: Ladowanie rzeczy na podstawie xmla
