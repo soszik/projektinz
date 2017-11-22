@@ -4,9 +4,22 @@ using UnityEngine;
 
 public class MasterScript : MonoBehaviour {
 
+    private List<GameObject> Puzzles;
+
+    void loadXml()
+    {
+        //TODO: Ladowanie rzeczy na podstawie xmla
+
+    }
+    public GameObject nextPuzzle()
+    {
+        //TODO: zwroc losowy puzel z listy
+        return new GameObject(); //placeholder
+    }
     public GameObject tunnel;
 	// Use this for initialization
 	void Start () {
+        //TODO: zmienic ponizsze na wstawienie pierwszego puzzla
 		for (int i =0; i < 10; i++)
         {
             GameObject nowytunel = Instantiate(tunnel);
