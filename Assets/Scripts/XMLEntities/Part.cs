@@ -9,5 +9,8 @@ namespace XMlParser
     {
         public String Type { set; get; }
         public String Id { set; get; }
+        public float Z { get;  set; }
+        public float Y { get;  set; }
+        public float X { get; set; }
     }
 }

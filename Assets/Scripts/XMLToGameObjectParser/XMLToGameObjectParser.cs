@@ -9,16 +9,27 @@ namespace Assets.Scripts.XMLToGameObjectParser
 {
     public static class XMLToGameObjectParser
     {
+        private static List<Scene> scns;
+
         public static List<GameObject> XMLToGameObjects(List<Scene> scenes)
         {
             List<GameObject> gameObjects = new List<GameObject>();
+            scns = scenes;
 
             foreach(var scene in scenes)
             {
                 gameObjects.AddRange(parseScene(scene));
             }
-
             return gameObjects;
+        }
+
+        public static GameObject getRootScene()
+        {
+            var scene = new GameObject(scns.ElementAt(0).Name);
+            scene.transform.position = new Vector3(scns.ElementAt(0).X, scns.ElementAt(0).Y, 
+                scns.ElementAt(0).Z);
+
+            return scene;
         }
 
         private static List<GameObject> parseScene(Scene scene)
@@ -41,11 +52,13 @@ namespace Assets.Scripts.XMLToGameObjectParser
             {
                 var sourceFile = puzzle.Files.Find(f => f.Type == part.Type);
                 var newGameObj = Resources.Load(sourceFile.Path) as GameObject;
+                newGameObj.transform.position = new Vector3(part.X, part.Y, part.Z);
                 gameObjectsFromPuzzle.Add(newGameObj);
             }
 
             return gameObjectsFromPuzzle;
         }
+
 
     }
 }

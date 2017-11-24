@@ -25,6 +25,7 @@ namespace XMlParser
                                         select new Scene()
                                         {
                                             Type = (string)s.Attribute("type"),
+                                            Name = (string)s.Attribute("name"),
                                             X = (int)s.Attribute("x"),
                                             Y = (int)s.Attribute("y"),
                                             Z = (int)s.Attribute("z"),
@@ -40,6 +41,9 @@ namespace XMlParser
                                                 {
                                                     Id = (string)part.Attribute("id"),
                                                     Type = (string)part.Attribute("type"),
+                                                    X = (int)part.Attribute("x"),
+                                                    Y = (int)part.Attribute("y"),
+                                                    Z = (int)part.Attribute("z"),
                                                 }).ToList(),
                                             }).ToList()
                                             

@@ -7,6 +7,7 @@ public class MasterScript : MonoBehaviour {
 
     private List<GameObject> Puzzles;
     private List<Scene> scenes;
+    private GameObject rootScene;
     enum Mode
     {
         Tunnel,
@@ -16,13 +17,23 @@ public class MasterScript : MonoBehaviour {
     void loadXml()
     {
          scenes = XmlLoader.LoadGameObjectsFromFile("sample2.xml");
-        //GameObject instance = Instantiate(Resources.Load("Czesc1Pref", typeof(GameObject))) as GameObject;
     }
     void parseToGameObjects()
     {
        Puzzles = XMLToGameObjectParser.XMLToGameObjects(scenes);
-   
     }
+    void setRootScene()
+    {
+        rootScene = XMLToGameObjectParser.getRootScene();
+    }
+
+    void initializeGameObjects()
+    {
+        foreach (var gameObj in Puzzles)
+        {
+            GameObject instance = Instantiate(gameObj, rootScene.transform) as GameObject;
+        }
+    } 
     public GameObject nextPuzzle()
     {
         //TODO: zwroc losowy puzel z listy
@@ -33,10 +44,10 @@ public class MasterScript : MonoBehaviour {
 	void Start () {
         loadXml();
         parseToGameObjects();
-        foreach(var gameObj in Puzzles)
-        {
-            GameObject instance = Instantiate(gameObj) as GameObject;
-        }
+        setRootScene();
+        initializeGameObjects();
+
+
         //TODO: zmienic ponizsze na wstawienie pierwszego puzzla
         /* for (int i =0; i < 10; i++)
          {
