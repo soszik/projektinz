@@ -1,0 +1,19 @@
+<xml>
+  <root>
+  <scene type="tunnel" x="7" y="7" z="7">
+    <puzzle name="Czesc1Pref">
+      <file path="prefabs/Czesc1Pref" type="puzzle1"/>
+      <part id="jeden" type="puzzle1" />
+      <file path="prefabs/Czesc2Pref" type="puzzle2"/>
+      <part id="dwa" type="puzzle2" />
+      <file path="prefabs/Czesc3Pref" type="puzzle3"/>
+      <part id="trzy" type="puzzle3" />
+    </puzzle>
+
+    <part>
+
+    </part>
+
+  </scene>
+</root>
+</xml>
