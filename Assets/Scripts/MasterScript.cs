@@ -7,8 +7,9 @@ using System.Linq;
 public class MasterScript : MonoBehaviour
 {
 
-    private List<GameObject> Puzzles;
-    private List<Scene> scenes;
+    public static List<GameObject> Puzzles = new List<GameObject>();
+    public static List<Vector3> PuzzlesPlacements = new List<Vector3>();
+    private Scene scene;
     private GameObject rootScene;
     public float size;
     enum Mode
@@ -16,14 +17,15 @@ public class MasterScript : MonoBehaviour
         Tunnel,
         OpenSpace
     }
+    //TODO w xml jako atr sceny
     private Mode environment = Mode.Tunnel;
     void loadXml()
     {
-        scenes = XmlLoader.LoadGameObjectsFromFile("sample2.xml");
+        scene = XmlLoader.LoadGameObjectsFromFile("sample2.xml");
     }
     void parseToGameObjects()
     {
-        Puzzles = XMLToGameObjectParser.XMLToGameObjects(scenes);
+        XMLToGameObjectParser.XMLToGameObjects(scene, ref Puzzles, ref PuzzlesPlacements);
     }
     void setRootScene()
     {
@@ -55,10 +57,13 @@ public class MasterScript : MonoBehaviour
 
 
     }
-    public GameObject nextPuzzle()
+    public static GameObject nextPuzzle()
     {
         //TODO: zwroc losowy puzel z listy
-        return new GameObject(); //placeholder
+        System.Random rnd = new System.Random();
+        int index = rnd.Next(Puzzles.Count);
+
+        return Puzzles.ElementAt(index);
     }
     public GameObject tunnel;
     // Use this for initialization

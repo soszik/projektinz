@@ -10,16 +10,16 @@ namespace XMlParser
     public static class XmlLoader
     {
         //TODO List of gameobjects
-        public static List <Scene> LoadGameObjectsFromFile(String path)
+        public static Scene LoadGameObjectsFromFile(String path)
         {
             //List<Scene> gameObjects = new List<Scene>();
             XDocument doc = XDocument.Load(path);
-            List<Scene> gameObjects = parseFromFile(doc);
+            Scene gameObjects = parseFromFile(doc);
 
             return gameObjects;
         }
 
-        private static List<Scene> parseFromFile(XDocument doc)
+        private static Scene parseFromFile(XDocument doc)
         {
             IEnumerable<Scene> result = from s in doc.Descendants("scene")
                                         select new Scene()
@@ -59,23 +59,23 @@ namespace XMlParser
                                                     rotationMax = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
                                                     rotationMin = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
                                                     bezierPoints = smallObject.Descendants("bezierPoint").Select(bezpierPoint => 
-                                                    new double[] { Double.Parse((string)bezpierPoint.Attribute("x")),
-                                                                    Double.Parse((string)bezpierPoint.Attribute("y")),
-                                                                    Double.Parse((string)bezpierPoint.Attribute("z"))}
+                                                    new float[] { float.Parse((string)bezpierPoint.Attribute("x")),
+                                                                    float.Parse((string)bezpierPoint.Attribute("y")),
+                                                                    float.Parse((string)bezpierPoint.Attribute("z"))}
                                                      
                                                     ).ToList(),
                                                 }).ToList(),
                                             }).ToList()
                                             
                                         };
-            return result.ToList<Scene>();
+            return result.ToList<Scene>().ElementAt(0);
         }
         //later parsed to Vertex3 in XMLToGameObjectParser
-        private static double[] xmlStringToDoubleArray(string toParse, int length)
+        private static float[] xmlStringToDoubleArray(string toParse, int length)
         {
-            double[] array = new double[length];
+            float[] array = new float[length];
 
-            array = Array.ConvertAll(toParse.Split(','), Double.Parse);
+            array = Array.ConvertAll(toParse.Split(','), float.Parse);
 
             return array;
         }

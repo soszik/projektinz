@@ -10,73 +10,114 @@ namespace Assets.Scripts.XMLToGameObjectParser
 {
     public static class XMLToGameObjectParser
     {
-        private static List<Scene> scns;
-        private static UnityEngine.Object injection;
+        private static Scene scn;
 
-        public static List<GameObject> XMLToGameObjects(List<Scene> scenes)
+        public static void XMLToGameObjects(Scene scene, ref List<GameObject> gameObjectsFromScene,
+           ref List<Vector3> puzzlesPlacements)
         {
-            List<GameObject> gameObjects = new List<GameObject>();
-            scns = scenes;
+            scn = scene;
 
-            foreach(var scene in scenes)
-            {
-                gameObjects.AddRange(parseScene(scene));
-            }
-            return gameObjects;
+            parseScene(scene, ref gameObjectsFromScene, ref puzzlesPlacements);
         }
 
         public static GameObject getRootScene()
         {
-            var scene = new GameObject(scns.ElementAt(0).Name);
-            scene.transform.position = new Vector3(scns.ElementAt(0).X, scns.ElementAt(0).Y, 
-                scns.ElementAt(0).Z);
+            var scene = new GameObject(scn.Name);
+            scene.transform.position = new Vector3(scn.X, scn.Y, scn.Z);
 
             return scene;
         }
 
-        private static List<GameObject> parseScene(Scene scene)
+        private static void parseScene(Scene scene, ref List<GameObject> gameObjectsFromScene,
+           ref List<Vector3> puzzlesPlacements)
         {
-            List<GameObject> gameObjectsFromScene = new List<GameObject>();
 
             foreach (var puzzle in scene.Puzzles)
             {
-                gameObjectsFromScene.AddRange(parsePuzzle(puzzle));
+                parsePuzzle(puzzle, ref gameObjectsFromScene, ref puzzlesPlacements);
             }
-
-            return gameObjectsFromScene;
         }
 
-        private static List<GameObject> parsePuzzle(Puzzle puzzle)
+
+
+        private static void parsePuzzle(Puzzle puzzle, ref List<GameObject> gameObjectsFromPuzzle,
+            ref List<Vector3> puzzlesPlacements)
         {
-            List<GameObject> gameObjectsFromPuzzle = new List<GameObject>();
 
             foreach (var part in puzzle.Parts)
             {
-                
+
                 var sourceFile = puzzle.Files.Find(f => f.Type == part.Type);
                 var newGameObj = UnityEngine.Object.Instantiate(Resources.Load(sourceFile.Path) as GameObject);
                 newGameObj.name = part.Id;
-                newGameObj.transform.position = new Vector3(part.X, part.Y, part.Z);
+                Vector3 puzzlePlacement = new Vector3(part.X, part.Y, part.Z);
+                newGameObj.transform.position = puzzlePlacement;
+                puzzlesPlacements.Add(puzzlePlacement);
                 gameObjectsFromPuzzle.Add(newGameObj);
 
                 foreach (var smallObject in puzzle.SmallObjects)
                 {
                     var sourceFileForSmall = puzzle.Files.Find(f => f.Type == smallObject.Type);
                     var newGameObjSmall = UnityEngine.Object.Instantiate(Resources.Load(sourceFileForSmall.Path) as GameObject
-                        ,newGameObj.transform);
+                        , newGameObj.transform);
                     newGameObjSmall.name = smallObject.Id;
-                    newGameObjSmall.transform.position = new Vector3((float)smallObject.bezierPoints.ElementAt(0)[0],
+                    newGameObjSmall.transform.position = new Vector3(smallObject.bezierPoints.ElementAt(0)[0],
                         (float)smallObject.bezierPoints.ElementAt(0)[1], (float)smallObject.bezierPoints.ElementAt(0)[2]);
-                    gameObjectsFromPuzzle.Add(newGameObjSmall);
+                    var comp = newGameObjSmall.AddComponent<FlyingObjectScript>() as FlyingObjectScript;
+                    setFlyingScriptProperties(ref comp, smallObject);
                 }
 
             }
-
-
-          
-
-            return gameObjectsFromPuzzle;
         }
+
+        private static void setFlyingScriptProperties(ref FlyingObjectScript comp, SmallObject smallObject)
+        {
+            comp.bezierPoints = getBezierPoints(smallObject.bezierPoints);
+            comp.bezierSpeed = smallObject.bezierSpeed;
+            comp.pulsation = Boolean.Parse(smallObject.pulsation);
+            if (comp.pulsation)
+            {
+                comp.pulsationAmplitudeMax = floatArrayToVector(smallObject.pulsationAmplitudeMax);
+                comp.pulsationAmplitudeMin = floatArrayToVector(smallObject.pulsationAmplitudeMin);
+                comp.pulsationFrequency = floatArrayToVector(smallObject.pulsationFrequency);
+            }
+            comp.rotate = Boolean.Parse(smallObject.rotate);
+            if (comp.rotate)
+            {
+                comp.rotationDir = floatArrayToVector(smallObject.rotationDir);
+                comp.rotationMax = floatArrayToVector(smallObject.rotationMax);
+                comp.rotationMin = floatArrayToVector(smallObject.rotationMin);
+                comp.rotationSpeed = floatArrayToVector(smallObject.rotationSpeed);
+            }
+
+            comp.vibrating = Boolean.Parse(smallObject.vibrating);
+            if (comp.vibrating)
+            {
+                comp.vibrationAmplitude = floatArrayToVector(smallObject.vibrationAmplitude);
+                comp.vibrationFrequency = floatArrayToVector(smallObject.vibrationFrequency);
+            }
+        }
+
+        private static Vector3 floatArrayToVector(float[] toPrase)
+        {
+            Vector3 vector = new Vector3(toPrase[0], toPrase[1], toPrase[2]);
+            
+            return vector;
+        }
+
+        private static List<Vector3> getBezierPoints(List<float[]> bezierPointsToParse)
+        {
+            List<Vector3> bezierPoints = new List<Vector3>();
+
+            foreach (var points in bezierPointsToParse)
+            {
+                bezierPoints.Add(new Vector3(points[0], points[1], points[2]));
+            }
+
+            return bezierPoints;
+        }
+
+
 
 
     }

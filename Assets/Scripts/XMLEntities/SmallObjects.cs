@@ -9,23 +9,26 @@ namespace XMlParser
     {
         public string Id { get; set; }
         public string Type { get; set; }
-        public List<double[]> bezierPoints { get; set; }
+        public List<float[]> bezierPoints { get; set; }
         public int bezierSpeed { get; set; }
 
-      public string vibrating { get; set; }
+        public string vibrating { get; set; }
         public string pulsation { get; set; }
         public string rotate { get; set; }
         
-        public double[] vibrationFrequency { get; set; }
-        public double[] vibrationAmplitude { get; set; }
+        public float[] vibrationFrequency { get; set; }
+        public float[] vibrationAmplitude { get; set; }
 
-        public double[] pulsationFrequency { get; set; }
-        public double[] pulsationAmplitudeMax { get; set; }
-        public double[] pulsationAmplitudeMin { get; set; }
+        public float[] pulsationFrequency { get; set; }
+        public float[] pulsationAmplitudeMax { get; set; }
+        public float[] pulsationAmplitudeMin { get; set; }
 
-        public double[] rotationSpeed { get; set; }
-        public double[] rotationMax { get; set; }
-        public double[] rotationMin { get; set; }
-        public double[] rotationDir { get; set; }
+        public float[] rotationSpeed { get; set; }
+        public float[] rotationMax { get; set; }
+        public float[] rotationMin { get; set; }
+        public float[] rotationDir { get; set; }
+
+
+
     }
 }
