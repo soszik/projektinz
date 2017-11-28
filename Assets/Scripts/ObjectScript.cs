@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlyingObjectScript : MonoBehaviour {
+public class ObjectScript : MonoBehaviour {
 
     private List<Vector3> bezierPoints;
 

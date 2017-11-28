@@ -45,10 +45,39 @@ namespace XMlParser
                                                     Y = (int)part.Attribute("y"),
                                                     Z = (int)part.Attribute("z"),
                                                 }).ToList(),
+                                                SmallObjects = p.Descendants("smallObject").Select(smallObject => new SmallObject()
+                                                {
+                                                    Id = (string)smallObject.Attribute("id"),
+                                                    Type = (string)smallObject.Attribute("type"),
+                                                    rotate = (string)smallObject.Attribute("rotate"),
+                                                    pulsation = (string)smallObject.Attribute("pulsation"),
+                                                    vibrating = (string)smallObject.Attribute("vibrating"),
+                                                    pulsationFrequency = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    pulsationAmplitudeMax = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    pulsationAmplitudeMin = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    rotationSpeed = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    rotationMax = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    rotationMin = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    bezierPoints = smallObject.Descendants("bezierPoint").Select(bezpierPoint => 
+                                                    new double[] { Double.Parse((string)bezpierPoint.Attribute("x")),
+                                                                    Double.Parse((string)bezpierPoint.Attribute("y")),
+                                                                    Double.Parse((string)bezpierPoint.Attribute("z"))}
+                                                     
+                                                    ).ToList(),
+                                                }).ToList(),
                                             }).ToList()
                                             
                                         };
             return result.ToList<Scene>();
+        }
+        //later parsed to Vertex3 in XMLToGameObjectParser
+        private static double[] xmlStringToDoubleArray(string toParse, int length)
+        {
+            double[] array = new double[length];
+
+            array = Array.ConvertAll(toParse.Split(','), Double.Parse);
+
+            return array;
         }
     }
 }

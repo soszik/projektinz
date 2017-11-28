@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XMlParser;
-public class MasterScript : MonoBehaviour {
+using System.Linq;
+public class MasterScript : MonoBehaviour
+{
 
     private List<GameObject> Puzzles;
     private List<Scene> scenes;
     private GameObject rootScene;
+    public float size;
     enum Mode
     {
         Tunnel,
@@ -16,11 +19,11 @@ public class MasterScript : MonoBehaviour {
     private Mode environment = Mode.Tunnel;
     void loadXml()
     {
-         scenes = XmlLoader.LoadGameObjectsFromFile("sample2.xml");
+        scenes = XmlLoader.LoadGameObjectsFromFile("sample2.xml");
     }
     void parseToGameObjects()
     {
-       Puzzles = XMLToGameObjectParser.XMLToGameObjects(scenes);
+        Puzzles = XMLToGameObjectParser.XMLToGameObjects(scenes);
     }
     void setRootScene()
     {
@@ -29,19 +32,38 @@ public class MasterScript : MonoBehaviour {
 
     void initializeGameObjects()
     {
-        foreach (var gameObj in Puzzles)
+        /*foreach (var gameObj in Puzzles)
         {
             GameObject instance = Instantiate(gameObj, rootScene.transform) as GameObject;
         }
-    } 
+
+
+        foreach (var scene in scenes)
+        {
+            foreach (var puzzle in scene.Puzzles)
+            {
+                foreach (var smallObject in puzzle.SmallObjects)
+                {
+                    var sourceFile = puzzle.Files.Find(f => f.Type == smallObject.Type);
+                    var newGameObj = Instantiate(Resources.Load(sourceFile.Path)) as GameObject;
+                    newGameObj.name = smallObject.Id;
+                    newGameObj.transform.position = new Vector3((float)smallObject.bezierPoints.ElementAt(0)[0],
+                        (float)smallObject.bezierPoints.ElementAt(0)[1], (float)smallObject.bezierPoints.ElementAt(0)[2]);
+                }
+            }
+        }*/
+
+
+    }
     public GameObject nextPuzzle()
     {
         //TODO: zwroc losowy puzel z listy
         return new GameObject(); //placeholder
     }
     public GameObject tunnel;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         loadXml();
         parseToGameObjects();
         setRootScene();
@@ -61,9 +83,10 @@ public class MasterScript : MonoBehaviour {
              }
          */
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 }

@@ -5,11 +5,13 @@ using System.Text;
 using UnityEngine;
 using XMlParser;
 
+
 namespace Assets.Scripts.XMLToGameObjectParser
 {
     public static class XMLToGameObjectParser
     {
         private static List<Scene> scns;
+        private static UnityEngine.Object injection;
 
         public static List<GameObject> XMLToGameObjects(List<Scene> scenes)
         {
@@ -50,11 +52,28 @@ namespace Assets.Scripts.XMLToGameObjectParser
 
             foreach (var part in puzzle.Parts)
             {
+                
                 var sourceFile = puzzle.Files.Find(f => f.Type == part.Type);
-                var newGameObj = Resources.Load(sourceFile.Path) as GameObject;
+                var newGameObj = UnityEngine.Object.Instantiate(Resources.Load(sourceFile.Path) as GameObject);
+                newGameObj.name = part.Id;
                 newGameObj.transform.position = new Vector3(part.X, part.Y, part.Z);
                 gameObjectsFromPuzzle.Add(newGameObj);
+
+                foreach (var smallObject in puzzle.SmallObjects)
+                {
+                    var sourceFileForSmall = puzzle.Files.Find(f => f.Type == smallObject.Type);
+                    var newGameObjSmall = UnityEngine.Object.Instantiate(Resources.Load(sourceFileForSmall.Path) as GameObject
+                        ,newGameObj.transform);
+                    newGameObjSmall.name = smallObject.Id;
+                    newGameObjSmall.transform.position = new Vector3((float)smallObject.bezierPoints.ElementAt(0)[0],
+                        (float)smallObject.bezierPoints.ElementAt(0)[1], (float)smallObject.bezierPoints.ElementAt(0)[2]);
+                    gameObjectsFromPuzzle.Add(newGameObjSmall);
+                }
+
             }
+
+
+          
 
             return gameObjectsFromPuzzle;
         }

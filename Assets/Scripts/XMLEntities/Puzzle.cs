@@ -11,6 +11,7 @@ namespace XMlParser
         public String Name { get; set; }
         public List<File> Files { get; set; }
         public List<Part> Parts { get; set; }
+        public List<SmallObject> SmallObjects { get; set; }
 
     }
 }

@@ -5,14 +5,23 @@
       <file path="prefabs/Czesc1Pref" type="puzzle1"/>
       <part id="jeden" type="puzzle1"
         x="10" y="10" z="10" />
-      <file path="prefabs/Czesc2Pref" type="puzzle2" />
-      <part id="dwa" type="puzzle2" 
-		    x="30" y="20" z="10" />
-      <file path="prefabs/Czesc3Pref" type="puzzle3"/>
-      <part id="trzy" type="puzzle3" 
-		    x="20" y="30" z="10" />	 
     </puzzle>
-
+    <puzzle name="Czesc2Pref">
+      <file path="prefabs/Czesc2Pref" type="puzzle2" />
+      <part id="dwa" type="puzzle2"
+		    x="30" y="20" z="10" />
+    </puzzle>
+    <puzzle>
+      <file path="prefabs/Czesc3Pref" type="puzzle3"/>
+      <part id="trzy" type="puzzle3"
+		    x="20" y="30" z="10" />
+      <file path="cylinderSmall" type="cylinderSmall" />
+      <smallObject id="small1" type="cylinderSmall" vibrating="false" pulsation="true" rotate="false" 
+        pulsationFrequency="2.,1.0,4.0"  pulsationAmplitudeMax="2,2,2"  pulsationAmplitudeMin="1,1,1"   
+        rotationSpeed="1,2,1" rotationMax="4,2,3" rotationMin="1,1,1" rotationDir="1,-1,1"    
+        
+      /> 
+    </puzzle>
   </scene>
 </root>
 </xml>
