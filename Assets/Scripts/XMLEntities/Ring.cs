@@ -15,13 +15,13 @@ namespace XMlParser
             Left,
             Right
         }
-        public bool right { get; set; }
+        public string right { get; set; }
         public float speed { get; set; }
-        public bool CreateNext { get; set; }
+        public string CreateNext { get; set; }
         //depending on createNext(if true)
-        public direction dir { get; set; }
+        public string dir { get; set; }
         //depending on createNext(if true)
-        public Vector3 placement { get; set; }
+        public float[] placement { get; set; }
         public int group { get; set; }
     }
 }

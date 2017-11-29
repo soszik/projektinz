@@ -7,6 +7,9 @@
         x="10" y="10" z="10" />
       <part id="jedenDwa" type="puzzle1"
         x="10" y="10" z="10" />
+	  <file path="prefabs/cylinderKolor" type="ring" />
+	  <ring type = "ring" right="true" speed="4" createNext="false"
+		direction="down" placement="4,5,8" group="1"/>
     </puzzle>
     <puzzle name="Czesc2Pref">
       <file path="prefabs/Czesc2Pref" type="puzzle2" />

@@ -45,6 +45,12 @@ namespace XMlParser
                                                     Y = (int)part.Attribute("y"),
                                                     Z = (int)part.Attribute("z"),
                                                 }).ToList(),
+                                                /*Rings = p.Descendants("ring").Select(ring => new XMlParser.Ring()
+                                                {
+                                                    CreateNext = (string)ring.Attribute("createNext"),
+                                                    dir = (string)ring.Attribute("direction"),
+                                                 
+                                                }).ToList(),*/
                                                 SmallObjects = p.Descendants("smallObject").Select(smallObject => new SmallObject()
                                                 {
                                                     Id = (string)smallObject.Attribute("id"),
@@ -52,12 +58,12 @@ namespace XMlParser
                                                     rotate = (string)smallObject.Attribute("rotate"),
                                                     pulsation = (string)smallObject.Attribute("pulsation"),
                                                     vibrating = (string)smallObject.Attribute("vibrating"),
-                                                    pulsationFrequency = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
-                                                    pulsationAmplitudeMax = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
-                                                    pulsationAmplitudeMin = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
-                                                    rotationSpeed = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
-                                                    rotationMax = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
-                                                    rotationMin = xmlStringToDoubleArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    pulsationFrequency = xmlStringToFloatArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    pulsationAmplitudeMax = xmlStringToFloatArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    pulsationAmplitudeMin = xmlStringToFloatArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    rotationSpeed = xmlStringToFloatArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    rotationMax = xmlStringToFloatArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    rotationMin = xmlStringToFloatArray((string)smallObject.Attribute("pulsationFrequency"), 3),
                                                     bezierPoints = smallObject.Descendants("bezierPoint").Select(bezpierPoint => 
                                                     new float[] { float.Parse((string)bezpierPoint.Attribute("x")),
                                                                     float.Parse((string)bezpierPoint.Attribute("y")),
@@ -65,13 +71,14 @@ namespace XMlParser
                                                      
                                                     ).ToList(),
                                                 }).ToList(),
+
                                             }).ToList()
                                             
                                         };
             return result.ToList<Scene>().ElementAt(0);
         }
         //later parsed to Vertex3 in XMLToGameObjectParser
-        private static float[] xmlStringToDoubleArray(string toParse, int length)
+        private static float[] xmlStringToFloatArray(string toParse, int length)
         {
             float[] array = new float[length];
 
