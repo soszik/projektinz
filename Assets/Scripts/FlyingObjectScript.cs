@@ -59,7 +59,7 @@ public class FlyingObjectScript : MonoBehaviour {
         {
             bezierPos = 0;
             bezierPair++;
-            if (bezierPair * 2 + 4 > bezierPoints.Count)
+            if (bezierPair * 2 + 4 >= bezierPoints.Count)
                 bezierPair = 0;
         }
     }
