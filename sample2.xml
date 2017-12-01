@@ -1,6 +1,6 @@
 <xml>
   <root>
-  <scene type="tunnel" x="7" y="7" z="7" size="7">
+  <scene type="tunnel" x="0" y="0" z="0" size="21">
       <puzzle name="Czesc1Pref">
       <file path="prefabs/Czesc1Kolor" type="puzzle1"/>
       <part id="jeden" type="puzzle1"

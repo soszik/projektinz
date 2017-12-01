@@ -31,84 +31,46 @@ public class RingScript : MonoBehaviour {
 
     void createNextPuzzle()
     {
-        Debug.Log("pew?");
-       if (dir == direction.Up)
+
+        GameObject positionMarker = new GameObject();
+        positionMarker.transform.position=transform.parent.transform.position;
+        positionMarker.transform.rotation = transform.parent.transform.rotation;
+            //transform.parent.transform.position, transform.parent.transform.rotation);
+        bool exists = false;
+        if (dir == direction.Down)
         {
-            Debug.Log("Pew");
-            bool exists = false;
-            Vector3 newPos = transform.parent.transform.position;
-            newPos.z += MasterScript.puzzleSize;
-            Debug.Log(MasterScript.puzzleSize);
-            Debug.Log(newPos.ToString() + " my");
-            foreach (var place in MasterScript.placements)
-            {
-                if (place == newPos)
-                    exists = true;
-                Debug.Log(place.ToString());
-            }
-            if (!exists)
-            {
-                MasterScript.placements.Add(newPos);
-                GameObject newPuzzle = GameObject.Instantiate(MasterScript.nextPuzzle(), newPos, transform.parent.transform.parent.transform.rotation);
-                Debug.Log("pew!");
-            }
+            positionMarker.transform.Rotate(0, 180, 0);
         }
-       else if (dir == direction.Down)
+        else if (dir == direction.Right)
         {
-            bool exists = false;
-            Vector3 newPos = transform.parent.transform.position;
-            newPos.z -= MasterScript.puzzleSize;
-            foreach (var place in MasterScript.placements)
-            {
-                if (place == newPos)
-                    exists = true;
-            }
-            if (!exists)
-            {
-                MasterScript.placements.Add(newPos);
-                GameObject newPuzzle = GameObject.Instantiate(MasterScript.nextPuzzle(), newPos, transform.parent.transform.parent.transform.rotation);
-                newPuzzle.transform.Rotate(0, 180, 0);
-            }
+            positionMarker.transform.Rotate(0, 90, 0);
         }
-       else if (dir == direction.Right)
+        else if (dir == direction.Left)
         {
-            bool exists = false;
-            Vector3 newPos = transform.parent.transform.position;
-            newPos.x += MasterScript.puzzleSize;
-            foreach (var place in MasterScript.placements)
-            {
-                if (place == newPos)
-                    exists = true;
-            }
-            if (!exists)
-            {
-                MasterScript.placements.Add(newPos);
-                GameObject newPuzzle = GameObject.Instantiate(MasterScript.nextPuzzle(), newPos, transform.parent.transform.parent.transform.rotation);
-                newPuzzle.transform.Rotate(0, 90, 0);
-            }
+            positionMarker.transform.Rotate(0, -90, 0);
         }
-       else if (dir == direction.Left)
+        positionMarker.transform.Translate(0,0,MasterScript.puzzleSize);
+        foreach (var place in MasterScript.placements)
         {
-            bool exists = false;
-            Vector3 newPos = transform.parent.transform.position;
-            newPos.x -= MasterScript.puzzleSize;
-            foreach (var place in MasterScript.placements)
-            {
-                if (place == newPos)
-                    exists = true;
-            }
-            if (!exists)
-            {
-                MasterScript.placements.Add(newPos);
-                GameObject newPuzzle = GameObject.Instantiate(MasterScript.nextPuzzle(), newPos, transform.parent.transform.parent.transform.rotation);
-                newPuzzle.transform.Rotate(0, -90, 0);
-            }
+            if (place == positionMarker.transform.position)
+                exists = true;
         }
+        if (!exists)
+        {
+
+            GameObject newPuzzle = GameObject.Instantiate(MasterScript.nextPuzzle(), positionMarker.transform.position, positionMarker.transform.rotation);
+            MasterScript.placements.Add(newPuzzle.transform.position);
+            newPuzzle.SetActive(true);
+        }
+        Destroy(positionMarker);
     }
     void OnTriggerEnter(Collider other)
     {
-        createNextPuzzle();
+
         if (CreateNext)
-                createNextPuzzle();
+        {
+            CreateNext = false;
+            createNextPuzzle();
+        }
     }
 }

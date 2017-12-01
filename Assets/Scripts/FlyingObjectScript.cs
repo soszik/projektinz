@@ -10,8 +10,8 @@ public class FlyingObjectScript : MonoBehaviour {
     private int bezierPair = 0;
     public Vector3 vibrationFrequency;
     public Vector3 vibrationAmplitude;
-    private Vector3 vibrationPos = new Vector3(0, 0, 0);
-    private Vector3 vibrationDir=new Vector3(1,1,1);
+    public Vector3 vibrationPos = new Vector3(0, 0, 0);
+    public Vector3 vibrationDir=new Vector3(1,1,1);
     public bool vibrating;
     public bool pulsation;
     public Vector3 pulsationFrequency;
@@ -23,8 +23,9 @@ public class FlyingObjectScript : MonoBehaviour {
     public Vector3 rotationSpeed;
     public Vector3 rotationMax;
     public Vector3 rotationMin;
-    public Vector3 rotationDir;
-    public Vector3 rotation=new Vector3(0,0,0);
+    public Vector3 rotationDir = new Vector3(1,1,1);
+    private Vector3 rotation=new Vector3(0,0,0);
+    private Vector3 startPos = new Vector3(0, 0, 0);
     public bool rotate;
 
     // Use this for initialization
@@ -114,13 +115,18 @@ public class FlyingObjectScript : MonoBehaviour {
     }
     void Start () {
         pulseDiff = new Vector3(pulsationAmplitudeMax.x - pulsationAmplitudeMin.x, pulsationAmplitudeMax.y - pulsationAmplitudeMin.y, pulsationAmplitudeMax.z - pulsationAmplitudeMin.z);
-        pulsePhase = new Vector3(pulsationAmplitudeMin.x + pulseDiff.x / 2, pulsationAmplitudeMin.y + pulseDiff.y / 2, pulsationAmplitudeMin.z + pulseDiff.z / 2); 
+        pulsePhase = new Vector3(pulsationAmplitudeMin.x + pulseDiff.x / 2, pulsationAmplitudeMin.y + pulseDiff.y / 2, pulsationAmplitudeMin.z + pulseDiff.z / 2);
+        if (bezierPoints.Count <= 4)
+            startPos = transform.position;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
         if (bezierPoints.Count >= 4)
             MoveBezier();
+        else
+            transform.position = startPos;
         if (vibrating)
             Vibrate();
         if (pulsation)

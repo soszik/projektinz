@@ -38,8 +38,14 @@ public class MasterScript : MonoBehaviour
     void initializeGameObjects()
     {
         CurrentPuzzle = Puzzles.ElementAt(0);
-        CurrentPuzzle.SetActive(true);
-
+        GameObject firstPuzzle = Instantiate(nextPuzzle(), new Vector3(0,0,0), CurrentPuzzle.transform.rotation);
+        placements.Add(firstPuzzle.transform.position);
+        firstPuzzle.SetActive(true);
+        GameObject back = Instantiate(nextPuzzle(), firstPuzzle.transform.position, firstPuzzle.transform.rotation);
+        back.transform.Rotate(0, 180, 0);
+        back.transform.Translate(0, 0, puzzleSize);
+        placements.Add(back.transform.position);
+        back.SetActive(true);
 
     }
     public static GameObject nextPuzzle()
@@ -47,9 +53,7 @@ public class MasterScript : MonoBehaviour
         //TODO: zwroc losowy puzel z listy
         System.Random rnd = new System.Random();
         int index = rnd.Next(Puzzles.Count);
-        CurrentPuzzle.SetActive(false);
         CurrentPuzzle = Puzzles.ElementAt(index);
-        CurrentPuzzle.SetActive(true);
         return CurrentPuzzle;
     }
     public GameObject tunnel;
@@ -59,9 +63,8 @@ public class MasterScript : MonoBehaviour
         loadXml();
         parseToGameObjects();
         setRootScene();
+        puzzleSize = scene.PuzzleSize;
         initializeGameObjects();
-        Debug.Log(scene.PuzzleSize);
-        size = scene.PuzzleSize * 3;
         CurrentPuzzle = nextPuzzle();
 
         //TODO: zmienic ponizsze na wstawienie pierwszego puzzla
