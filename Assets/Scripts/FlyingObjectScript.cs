@@ -24,6 +24,7 @@ public class FlyingObjectScript : MonoBehaviour {
     public Vector3 rotationMax;
     public Vector3 rotationMin;
     public Vector3 rotationDir;
+    public Vector3 rotation=new Vector3(0,0,0);
     public bool rotate;
 
     // Use this for initialization
@@ -87,23 +88,26 @@ public class FlyingObjectScript : MonoBehaviour {
             transform.Rotate(rotationSpeed.x* rotationDir.x * Time.deltaTime, rotationSpeed.y * rotationDir.y * Time.deltaTime, rotationSpeed.z * rotationDir.z * Time.deltaTime);
         if (rotationMax.x != rotationMin.x)
         {
-            if (transform.rotation.eulerAngles.x >= rotationMax.x)
+            rotation.x += rotationSpeed.x * rotationDir.x * Time.deltaTime;
+            if (rotation.x >= rotationMax.x)
                 rotationDir.x = -1;
-            if (transform.rotation.eulerAngles.x <= rotationMin.x)
+            if (rotation.x <= rotationMin.x)
                 rotationDir.x = 1;
         }
         if (rotationMax.y != rotationMin.y)
         {
-            if (transform.rotation.eulerAngles.y >= rotationMax.y)
+            rotation.y += rotationSpeed.y * rotationDir.y * Time.deltaTime;
+            if (rotation.y >= rotationMax.y)
                 rotationDir.y = -1;
-            if (transform.rotation.eulerAngles.y <= rotationMin.y)
+            if (rotation.y <= rotationMin.y)
                 rotationDir.y = 1;
         }
         if (rotationMax.z != rotationMin.z)
         {
-            if (transform.rotation.eulerAngles.z >= rotationMax.z)
+            rotation.z += rotationSpeed.z * rotationDir.z * Time.deltaTime;
+            if (rotation.z >= rotationMax.z)
                 rotationDir.z = -1;
-            if (transform.rotation.eulerAngles.z <= rotationMin.z)
+            if (rotation.z <= rotationMin.z)
                 rotationDir.z = 1;
         }
 

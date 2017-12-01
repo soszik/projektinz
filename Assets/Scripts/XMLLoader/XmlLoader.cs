@@ -29,8 +29,10 @@ namespace XMlParser
                                             X = (int)s.Attribute("x"),
                                             Y = (int)s.Attribute("y"),
                                             Z = (int)s.Attribute("z"),
+                                            PuzzleSize = float.Parse((string)s.Attribute("size")),
                                             Puzzles = s.Descendants("puzzle").Select(p => new Puzzle()
                                             {
+                                               
                                                 Name = (string)p.Attribute("name"),
                                                 Files = p.Descendants("file").Select(f => new File()
                                                 {
@@ -44,26 +46,33 @@ namespace XMlParser
                                                     X = (int)part.Attribute("x"),
                                                     Y = (int)part.Attribute("y"),
                                                     Z = (int)part.Attribute("z"),
+                                                    Scale = (int)part.Attribute("scale"),
                                                 }).ToList(),
-                                                /*Rings = p.Descendants("ring").Select(ring => new XMlParser.Ring()
+                                                Rings = p.Descendants("ring").Select(ring => new Ring()
                                                 {
-                                                    CreateNext = (string)ring.Attribute("createNext"),
-                                                    dir = (string)ring.Attribute("direction"),
-                                                 
-                                                }).ToList(),*/
+                                                    Scale = (int)ring.Attribute("scale"),
+                                                    Id = (string)ring.Attribute("id"),
+                                                    Group = (int)ring.Attribute("group"),
+                                                    Placement = xmlStringToFloatArray((string)ring.Attribute("placement"), 3),
+                                                    CreateNext = bool.Parse((string)ring.Attribute("createNext")),
+                                                    Right = (string)ring.Attribute("right"),
+                                                    Speed = float.Parse((string)ring.Attribute("speed")),
+                                                    Dir = (Ring.direction)Enum.Parse(typeof(Ring.direction), (string)ring.Attribute("dir")),
+                                                }).ToList(),
                                                 SmallObjects = p.Descendants("smallObject").Select(smallObject => new SmallObject()
                                                 {
+                                                    Scale = (int)smallObject.Attribute("scale"),
                                                     Id = (string)smallObject.Attribute("id"),
                                                     Type = (string)smallObject.Attribute("type"),
                                                     rotate = (string)smallObject.Attribute("rotate"),
                                                     pulsation = (string)smallObject.Attribute("pulsation"),
                                                     vibrating = (string)smallObject.Attribute("vibrating"),
                                                     pulsationFrequency = xmlStringToFloatArray((string)smallObject.Attribute("pulsationFrequency"), 3),
-                                                    pulsationAmplitudeMax = xmlStringToFloatArray((string)smallObject.Attribute("pulsationFrequency"), 3),
-                                                    pulsationAmplitudeMin = xmlStringToFloatArray((string)smallObject.Attribute("pulsationFrequency"), 3),
-                                                    rotationSpeed = xmlStringToFloatArray((string)smallObject.Attribute("pulsationFrequency"), 3),
-                                                    rotationMax = xmlStringToFloatArray((string)smallObject.Attribute("pulsationFrequency"), 3),
-                                                    rotationMin = xmlStringToFloatArray((string)smallObject.Attribute("pulsationFrequency"), 3),
+                                                    pulsationAmplitudeMax = xmlStringToFloatArray((string)smallObject.Attribute("pulsationAmplitudeMax"), 3),
+                                                    pulsationAmplitudeMin = xmlStringToFloatArray((string)smallObject.Attribute("pulsationAmplitudeMin"), 3),
+                                                    rotationSpeed = xmlStringToFloatArray((string)smallObject.Attribute("rotationSpeed"), 3),
+                                                    rotationMax = xmlStringToFloatArray((string)smallObject.Attribute("rotationMax"), 3),
+                                                    rotationMin = xmlStringToFloatArray((string)smallObject.Attribute("rotationMin"), 3),
                                                     bezierPoints = smallObject.Descendants("bezierPoint").Select(bezpierPoint => 
                                                     new float[] { float.Parse((string)bezpierPoint.Attribute("x")),
                                                                     float.Parse((string)bezpierPoint.Attribute("y")),
@@ -71,7 +80,7 @@ namespace XMlParser
                                                      
                                                     ).ToList(),
                                                 }).ToList(),
-
+                                                
                                             }).ToList()
                                             
                                         };

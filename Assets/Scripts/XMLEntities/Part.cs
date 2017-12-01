@@ -12,5 +12,6 @@ namespace XMlParser
         public float Z { get;  set; }
         public float Y { get;  set; }
         public float X { get; set; }
+        public int Scale { get; set; }
     }
 }

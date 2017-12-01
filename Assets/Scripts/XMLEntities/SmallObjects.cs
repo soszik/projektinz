@@ -27,7 +27,7 @@ namespace XMlParser
         public float[] rotationMax { get; set; }
         public float[] rotationMin { get; set; }
         public float[] rotationDir { get; set; }
-
+        public int Scale { get; set; }
 
 
     }

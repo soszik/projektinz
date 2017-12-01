@@ -8,10 +8,13 @@ public class MasterScript : MonoBehaviour
 {
 
     public static List<GameObject> Puzzles = new List<GameObject>();
-    public static List<Vector3> PuzzlesPlacements = new List<Vector3>();
+    public static List<Vector3> placements = new List<Vector3>();
+    public static float puzzleSize;
     private Scene scene;
     private GameObject rootScene;
     public float size;
+    public static GameObject CurrentPuzzle;
+    public GameObject NextPuzlle;
     enum Mode
     {
         Tunnel,
@@ -25,7 +28,7 @@ public class MasterScript : MonoBehaviour
     }
     void parseToGameObjects()
     {
-        XMLToGameObjectParser.XMLToGameObjects(scene, ref Puzzles, ref PuzzlesPlacements);
+        XMLToGameObjectParser.XMLToGameObjects(scene, ref Puzzles, ref placements);
     }
     void setRootScene()
     {
@@ -34,26 +37,8 @@ public class MasterScript : MonoBehaviour
 
     void initializeGameObjects()
     {
-        /*foreach (var gameObj in Puzzles)
-        {
-            GameObject instance = Instantiate(gameObj, rootScene.transform) as GameObject;
-        }
-
-
-        foreach (var scene in scenes)
-        {
-            foreach (var puzzle in scene.Puzzles)
-            {
-                foreach (var smallObject in puzzle.SmallObjects)
-                {
-                    var sourceFile = puzzle.Files.Find(f => f.Type == smallObject.Type);
-                    var newGameObj = Instantiate(Resources.Load(sourceFile.Path)) as GameObject;
-                    newGameObj.name = smallObject.Id;
-                    newGameObj.transform.position = new Vector3((float)smallObject.bezierPoints.ElementAt(0)[0],
-                        (float)smallObject.bezierPoints.ElementAt(0)[1], (float)smallObject.bezierPoints.ElementAt(0)[2]);
-                }
-            }
-        }*/
+        CurrentPuzzle = Puzzles.ElementAt(0);
+        CurrentPuzzle.SetActive(true);
 
 
     }
@@ -62,8 +47,10 @@ public class MasterScript : MonoBehaviour
         //TODO: zwroc losowy puzel z listy
         System.Random rnd = new System.Random();
         int index = rnd.Next(Puzzles.Count);
-
-        return Puzzles.ElementAt(index);
+        CurrentPuzzle.SetActive(false);
+        CurrentPuzzle = Puzzles.ElementAt(index);
+        CurrentPuzzle.SetActive(true);
+        return CurrentPuzzle;
     }
     public GameObject tunnel;
     // Use this for initialization
@@ -73,7 +60,9 @@ public class MasterScript : MonoBehaviour
         parseToGameObjects();
         setRootScene();
         initializeGameObjects();
-
+        Debug.Log(scene.PuzzleSize);
+        size = scene.PuzzleSize * 3;
+        CurrentPuzzle = nextPuzzle();
 
         //TODO: zmienic ponizsze na wstawienie pierwszego puzzla
         /* for (int i =0; i < 10; i++)

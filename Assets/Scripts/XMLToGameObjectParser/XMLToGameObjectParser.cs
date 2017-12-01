@@ -51,9 +51,11 @@ namespace Assets.Scripts.XMLToGameObjectParser
                 var newGameObj = UnityEngine.Object.Instantiate(Resources.Load(sourceFile.Path) as GameObject);
                 newGameObj.name = part.Id;
                 Vector3 puzzlePlacement = new Vector3(part.X, part.Y, part.Z);
+                newGameObj.SetActive(false);
                 newGameObj.transform.position = puzzlePlacement;
                 puzzlesPlacements.Add(puzzlePlacement);
                 gameObjectsFromPuzzle.Add(newGameObj);
+
 
                 foreach (var smallObject in puzzle.SmallObjects)
                 {
@@ -67,7 +69,28 @@ namespace Assets.Scripts.XMLToGameObjectParser
                     setFlyingScriptProperties(ref comp, smallObject);
                 }
 
+                foreach (var ring in puzzle.Rings)
+                {
+                    var sourceFileForRing= puzzle.Files.Find(f => f.Type == "ring");
+                    var newGameRing= UnityEngine.Object.Instantiate(Resources.Load(sourceFileForRing.Path) as GameObject
+                        , newGameObj.transform);
+                    newGameRing.name = ring.Id;
+                    newGameRing.transform.position = new Vector3(ring.Placement[0], ring.Placement[1],
+                        ring.Placement[2]);
+                    var comp = newGameRing.AddComponent<RingScript>() as RingScript;
+                    setRingScriptProperties(ref comp, ring);
+                }
+
             }
+        }
+
+        private static void setRingScriptProperties(ref RingScript comp, Ring ring)
+        {
+            comp.CreateNext = ring.CreateNext;
+            comp.dir = (RingScript.direction)ring.Dir;
+            comp.group = ring.Group;
+            comp.right = bool.Parse(ring.Right);
+            comp.speed = ring.Speed;
         }
 
         private static void setFlyingScriptProperties(ref FlyingObjectScript comp, SmallObject smallObject)
