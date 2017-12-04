@@ -1,13 +1,13 @@
 <xml>
   <root>
-  <scene type="tunnel" x="0" y="0" z="0" size="21">
+  <scene type="tunnel" x="0" y="0" z="0" size="27">
     <puzzle name="Czesc1Pref">
-      <file path="prefabs/Czesc1Kolor" type="puzzle1"/>
+      <file path="prefabs/Czesc1KolorB-Skybox" type="puzzle1"/>
       <part id="jeden" type="puzzle1"
         x="0" y="0" z="0" scale="1"/>
     </puzzle>
     <puzzle name="Czesc2Pref">
-      <file path="prefabs/Czesc2Kolor" type="puzzle2"/>
+      <file path="prefabs/Czesc2KolorB-Skybox" type="puzzle2"/>
       <part id="dwa" type="puzzle2"
         x="0" y="0" z="0" scale="1"/>
     </puzzle>
