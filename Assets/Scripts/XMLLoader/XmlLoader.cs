@@ -30,6 +30,11 @@ namespace XMlParser
                                             Y = (int)s.Attribute("y"),
                                             Z = (int)s.Attribute("z"),
                                             PuzzleSize = float.Parse((string)s.Attribute("size")),
+                                            AudioItems = s.Descendants("audio").Select(audio => new Audio()
+                                            {
+                                                  Id = (string)audio.Attribute("id"),
+                                                  Path = (String)audio.Attribute("path"),
+                                            }).ToList(),
                                             Puzzles = s.Descendants("puzzle").Select(p => new Puzzle()
                                             {
                                                

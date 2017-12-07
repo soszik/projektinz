@@ -9,6 +9,7 @@ public class MasterScript : MonoBehaviour
 
     public static List<GameObject> Puzzles = new List<GameObject>();
     public static List<Vector3> placements = new List<Vector3>();
+    public static List<AudioClip> AudioItems = new List<AudioClip>();
     public static float puzzleSize;
     private Scene scene;
     private GameObject rootScene;
@@ -28,7 +29,7 @@ public class MasterScript : MonoBehaviour
     }
     void parseToGameObjects()
     {
-        XMLToGameObjectParser.XMLToGameObjects(scene, ref Puzzles, ref placements);
+        XMLToGameObjectParser.XMLToGameObjects(scene, ref Puzzles, ref placements, ref AudioItems);
     }
     void setRootScene()
     {
@@ -65,6 +66,7 @@ public class MasterScript : MonoBehaviour
         setRootScene();
         puzzleSize = scene.PuzzleSize;
         initializeGameObjects();
+        Debug.Log(AudioItems.ElementAt(0).name);
         CurrentPuzzle = nextPuzzle();
 
         //TODO: zmienic ponizsze na wstawienie pierwszego puzzla

@@ -13,11 +13,11 @@ namespace Assets.Scripts.XMLToGameObjectParser
         private static Scene scn;
 
         public static void XMLToGameObjects(Scene scene, ref List<GameObject> gameObjectsFromScene,
-           ref List<Vector3> puzzlesPlacements)
+           ref List<Vector3> puzzlesPlacements, ref List<AudioClip> AudioItems)
         {
             scn = scene;
 
-            parseScene(scene, ref gameObjectsFromScene, ref puzzlesPlacements);
+            parseScene(scene, ref gameObjectsFromScene, ref puzzlesPlacements, ref AudioItems);
         }
 
         public static GameObject getRootScene()
@@ -29,8 +29,15 @@ namespace Assets.Scripts.XMLToGameObjectParser
         }
 
         private static void parseScene(Scene scene, ref List<GameObject> gameObjectsFromScene,
-           ref List<Vector3> puzzlesPlacements)
+           ref List<Vector3> puzzlesPlacements, ref List<AudioClip> AudioItems)
         {
+            foreach (var audio in scene.AudioItems)
+            {
+                AudioClip audioItem = UnityEngine.Object.Instantiate(
+                    Resources.Load(audio.Path) as AudioClip);
+                audioItem.name = audio.Id.ToString();
+                AudioItems.Add(audioItem);
+            }
 
             foreach (var puzzle in scene.Puzzles)
             {
