@@ -30,7 +30,6 @@ public class FPSConrtoller : MonoBehaviour
     private float m_NextStep;
     private bool m_Jumping;
 
-
     public float moveSpeed = 0.1f;
     public float moveThreshold = 0.03f;
     public float lookSensitivity = 3.0f;
@@ -84,6 +83,24 @@ public class FPSConrtoller : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.up, out hit, 3f))
+        {
+            if (hit.transform.GetComponent<RingScript>() != null)
+            {
+                if (GetComponent<AudioSource>().clip != MasterScript.AudioItems[0])
+                {
+                    GetComponent<AudioSource>().clip = MasterScript.AudioItems[0];
+                    GetComponent<AudioSource>().Play();
+                }
+            }
+            else if (GetComponent<AudioSource>().clip != MasterScript.AudioItems[1])
+            {
+                GetComponent<AudioSource>().clip = MasterScript.AudioItems[1];
+                GetComponent<AudioSource>().Play();
+            }
+
+            }
         //RotateView();
 
         // the jump state needs to read here to make sure it is not missed
