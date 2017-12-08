@@ -7,7 +7,7 @@ namespace XMlParser
     public class Scene
     {
         public Scene() { }
-
+        public int GroupCount { get; set; }
         public String Type { get; set; }
         public String Name { get; set; }
         public List<Puzzle> Puzzles { get; set; }

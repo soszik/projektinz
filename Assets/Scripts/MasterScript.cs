@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using XMlParser;
 using System.Linq;
 public class MasterScript : MonoBehaviour
@@ -23,6 +24,7 @@ public class MasterScript : MonoBehaviour
     }
     //TODO w xml jako atr sceny
     private Mode environment = Mode.Tunnel;
+    
     void loadXml()
     {
         scene = XmlLoader.LoadGameObjectsFromFile("sample2.xml");
@@ -66,9 +68,15 @@ public class MasterScript : MonoBehaviour
         setRootScene();
         puzzleSize = scene.PuzzleSize;
         initializeGameObjects();
-        Debug.Log(AudioItems.ElementAt(0).name);
         CurrentPuzzle = nextPuzzle();
-
+        Dropdown dropdown = GameObject.FindGameObjectWithTag("drop").GetComponent<Dropdown>();
+        dropdown.ClearOptions();
+        List<string> options = new List<string>();
+        if (scene.GroupCount > 20)
+            scene.GroupCount = 20;
+        for (int i = 0; i <= scene.GroupCount; i++)
+            options.Add(i.ToString());
+        dropdown.AddOptions(options);
         //TODO: zmienic ponizsze na wstawienie pierwszego puzzla
         /* for (int i =0; i < 10; i++)
          {

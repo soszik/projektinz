@@ -27,7 +27,7 @@ public class FlyingObjectScript : MonoBehaviour {
     private Vector3 rotation=new Vector3(0,0,0);
     private Vector3 startPos = new Vector3(0, 0, 0);
     public bool rotate;
-
+    public int group = 0;
     // Use this for initialization
 
     void Vibrate()
@@ -113,13 +113,18 @@ public class FlyingObjectScript : MonoBehaviour {
         }
 
     }
-    void Start () {
+
+    public void calculateDiff()
+    {
         pulseDiff = new Vector3(pulsationAmplitudeMax.x - pulsationAmplitudeMin.x, pulsationAmplitudeMax.y - pulsationAmplitudeMin.y, pulsationAmplitudeMax.z - pulsationAmplitudeMin.z);
+    }
+    void Start () {
+        calculateDiff();
         pulsePhase = new Vector3(pulsationAmplitudeMin.x + pulseDiff.x / 2, pulsationAmplitudeMin.y + pulseDiff.y / 2, pulsationAmplitudeMin.z + pulseDiff.z / 2);
         if (bezierPoints.Count <= 4)
             startPos = transform.position;
-
-	}
+        transform.tag = "Grupa " + group.ToString();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -133,6 +138,7 @@ public class FlyingObjectScript : MonoBehaviour {
             Pulse();
         if (rotate)
             Rotate();
+        
 
     }
 }

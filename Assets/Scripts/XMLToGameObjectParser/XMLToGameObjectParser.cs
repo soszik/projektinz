@@ -58,7 +58,7 @@ namespace Assets.Scripts.XMLToGameObjectParser
                 var newGameObj = UnityEngine.Object.Instantiate(Resources.Load(sourceFile.Path) as GameObject);
                 newGameObj.name = part.Id;
                 Vector3 puzzlePlacement = new Vector3(part.X, -5, part.Z);
-                newGameObj.SetActive(false);
+                //newGameObj.SetActive(false);
                 newGameObj.transform.position = puzzlePlacement;
                 puzzlesPlacements.Add(puzzlePlacement);
                 gameObjectsFromPuzzle.Add(newGameObj);

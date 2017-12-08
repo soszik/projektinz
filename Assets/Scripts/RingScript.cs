@@ -18,7 +18,7 @@ public class RingScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+        transform.tag = "Grupa " + group.ToString();
 	}
 	
 	// Update is called once per frame
@@ -58,7 +58,7 @@ public class RingScript : MonoBehaviour {
         if (!exists)
         {
 
-            GameObject newPuzzle = GameObject.Instantiate(MasterScript.nextPuzzle(), positionMarker.transform.position, positionMarker.transform.rotation);
+            GameObject newPuzzle = Instantiate(MasterScript.nextPuzzle(), positionMarker.transform.position, positionMarker.transform.rotation);
             MasterScript.placements.Add(newPuzzle.transform.position);
             newPuzzle.SetActive(true);
         }
