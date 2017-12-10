@@ -16,6 +16,7 @@ namespace XMlParser
         public int Z { get; set; }
         public float PuzzleSize { get; set; }
         public List<Audio> AudioItems { get; set; }
+        public List<SmallObject> SmallObjects { get; set; }
 
     }
 

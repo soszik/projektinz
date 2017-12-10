@@ -11,6 +11,7 @@ public class MasterScript : MonoBehaviour
     public GameObject UI;
     public static MasterScript master;
     public List<GameObject> Puzzles = new List<GameObject>();
+    public List<GameObject> SmallObjects = new List<GameObject>();
     public List<Vector3> placements = new List<Vector3>();
     public List<AudioClip> AudioItems = new List<AudioClip>();
     public float puzzleSize;
@@ -33,7 +34,8 @@ public class MasterScript : MonoBehaviour
     }
     void parseToGameObjects()
     {
-        XMLToGameObjectParser.XMLToGameObjects(scene, ref Puzzles, ref placements, ref AudioItems);
+        XMLToGameObjectParser.XMLToGameObjects(scene, ref Puzzles, ref placements, ref AudioItems,
+                                                ref SmallObjects);
     }
     void setRootScene()
     {
@@ -51,6 +53,7 @@ public class MasterScript : MonoBehaviour
         back.transform.Translate(0, 0, puzzleSize);
         placements.Add(back.transform.position);
         back.SetActive(true);
+      
 
     }
     public GameObject nextPuzzle()
@@ -69,7 +72,8 @@ public class MasterScript : MonoBehaviour
         if (LzwpManager.Instance.isServer)
         {
             master = this.GetComponent<MasterScript>();
-            //loadXml();
+            loadXml();
+            parseToGameObjects();
             //parseToGameObjects();
             //setRootScene();
             //puzzleSize = scene.PuzzleSize;
@@ -90,18 +94,8 @@ public class MasterScript : MonoBehaviour
             dropdown.AddOptions(options);
         }
         else
-            UI.SetActive(false);      //TODO: zmienic ponizsze na wstawienie pierwszego puzzla
-        /* for (int i =0; i < 10; i++)
-         {
-             GameObject nowytunel = Instantiate(tunnel);
-             nowytunel.transform.Translate(i, 0, 0);
-             nowytunel.transform.rotation = Quaternion.Euler(i*33,0,0);
-             if (i % 2 == 1)
-             {
-                 nowytunel.GetComponent<RingScript>().right = false;
-                 nowytunel.GetComponent<RingScript>().speed = i*10;
-             }
-         */
+            UI.SetActive(false);      
+
     }
 
     // Update is called once per frame

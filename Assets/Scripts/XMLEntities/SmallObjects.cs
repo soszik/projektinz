@@ -7,7 +7,7 @@ namespace XMlParser
 {
     public class SmallObject
     {
-        public string Id { get; set; }
+        public string Name { get; set; }
         public string Type { get; set; }
         public List<float[]> bezierPoints { get; set; }
         public int bezierSpeed { get; set; }
@@ -28,6 +28,7 @@ namespace XMlParser
         public float[] rotationMin { get; set; }
         public float[] rotationDir { get; set; }
         public int Scale { get; set; }
+        public int Group { get; set; }
 
 
     }

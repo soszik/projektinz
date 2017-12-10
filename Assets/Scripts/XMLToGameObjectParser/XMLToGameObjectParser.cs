@@ -13,11 +13,11 @@ namespace Assets.Scripts.XMLToGameObjectParser
         private static Scene scn;
 
         public static void XMLToGameObjects(Scene scene, ref List<GameObject> gameObjectsFromScene,
-           ref List<Vector3> puzzlesPlacements, ref List<AudioClip> AudioItems)
+           ref List<Vector3> puzzlesPlacements, ref List<AudioClip> AudioItems, ref List<GameObject> SmallObjects)
         {
             scn = scene;
 
-            parseScene(scene, ref gameObjectsFromScene, ref puzzlesPlacements, ref AudioItems);
+            parseScene(scene, ref gameObjectsFromScene, ref puzzlesPlacements, ref AudioItems, ref SmallObjects);
         }
 
         public static GameObject getRootScene()
@@ -28,8 +28,9 @@ namespace Assets.Scripts.XMLToGameObjectParser
             return scene;
         }
 
-        private static void parseScene(Scene scene, ref List<GameObject> gameObjectsFromScene,
-           ref List<Vector3> puzzlesPlacements, ref List<AudioClip> AudioItems)
+        private static void parseScene(Scene scene, ref List<GameObject> Puzzles,
+           ref List<Vector3> puzzlesPlacements, ref List<AudioClip> AudioItems, 
+           ref List<GameObject> SmallObjects)
         {
             foreach (var audio in scene.AudioItems)
             {
@@ -38,10 +39,37 @@ namespace Assets.Scripts.XMLToGameObjectParser
                 audioItem.name = audio.Id.ToString();
                 AudioItems.Add(audioItem);
             }
-
-            foreach (var puzzle in scene.Puzzles)
+            for (int i = Puzzles.Count - 1; i >= 0; i--)
             {
-                parsePuzzle(puzzle, ref gameObjectsFromScene, ref puzzlesPlacements);
+                bool isToSet = false;
+               
+                foreach (var puzzleToSet in scene.Puzzles)
+                {
+                    if (puzzleToSet.Name.Equals(Puzzles.ElementAt(i).name))
+                    {
+                        isToSet = true;
+                    }                  
+                }
+                if (!isToSet)
+                {
+                    Puzzles.RemoveAt(i);
+                }
+            }
+
+            for (int i = SmallObjects.Count - 1; i >= 0; i--)
+            {
+                foreach (var smallObjToSet in scene.SmallObjects)
+                {
+                    if (smallObjToSet.Name.Equals(SmallObjects.ElementAt(i).name))
+                    {
+                        SmallObjects.ElementAt(i).transform.position = new Vector3(smallObjToSet.bezierPoints.ElementAt(0)[0],
+                            (float)smallObjToSet.bezierPoints.ElementAt(0)[1], (float)smallObjToSet.bezierPoints.ElementAt(0)[2]);
+                        var comp = SmallObjects.ElementAt(i).AddComponent<FlyingObjectScript>() as FlyingObjectScript;
+                        setFlyingScriptProperties(ref comp, smallObjToSet);
+                        Network.Instantiate(SmallObjects.ElementAt(i), SmallObjects.ElementAt(i).transform.position,
+                            SmallObjects.ElementAt(i).transform.rotation, 1);
+                    }
+                }
             }
         }
 
@@ -64,17 +92,7 @@ namespace Assets.Scripts.XMLToGameObjectParser
                 gameObjectsFromPuzzle.Add(newGameObj);
 
 
-                foreach (var smallObject in puzzle.SmallObjects)
-                {
-                    var sourceFileForSmall = puzzle.Files.Find(f => f.Type == smallObject.Type);
-                    var newGameObjSmall = UnityEngine.Object.Instantiate(Resources.Load(sourceFileForSmall.Path) as GameObject
-                        , newGameObj.transform);
-                    newGameObjSmall.name = smallObject.Id;
-                    newGameObjSmall.transform.position = new Vector3(smallObject.bezierPoints.ElementAt(0)[0],
-                        (float)smallObject.bezierPoints.ElementAt(0)[1], (float)smallObject.bezierPoints.ElementAt(0)[2]);
-                    var comp = newGameObjSmall.AddComponent<FlyingObjectScript>() as FlyingObjectScript;
-                    setFlyingScriptProperties(ref comp, smallObject);
-                }
+               
 
                 foreach (var ring in puzzle.Rings)
                 {
@@ -126,6 +144,7 @@ namespace Assets.Scripts.XMLToGameObjectParser
                 comp.vibrationAmplitude = floatArrayToVector(smallObject.vibrationAmplitude);
                 comp.vibrationFrequency = floatArrayToVector(smallObject.vibrationFrequency);
             }
+            comp.ChangeGroupNumber(smallObject.Group);
         }
 
         private static Vector3 floatArrayToVector(float[] toPrase)

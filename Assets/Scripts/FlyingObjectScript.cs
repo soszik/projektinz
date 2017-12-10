@@ -30,6 +30,11 @@ public class FlyingObjectScript : MonoBehaviour {
     public int group = 0;
     // Use this for initialization
 
+
+    public void ChangeGroupNumber(int number)
+    {
+        this.group = number;
+    }
     void Vibrate()
     {
         vibrationPos.x += vibrationAmplitude.x * vibrationFrequency.x * vibrationDir.x * Time.deltaTime;
