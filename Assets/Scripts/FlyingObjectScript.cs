@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using LZWPlib;
 public class FlyingObjectScript : MonoBehaviour {
 
     public List<Vector3> bezierPoints;
@@ -128,17 +128,19 @@ public class FlyingObjectScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (bezierPoints.Count >= 4)
-            MoveBezier();
-        else
-            transform.position = startPos;
-        if (vibrating)
-            Vibrate();
-        if (pulsation)
-            Pulse();
-        if (rotate)
-            Rotate();
-        
+        if (LzwpManager.Instance.isServer)
+        {
+            if (bezierPoints.Count >= 4)
+                MoveBezier();
+            else
+                transform.position = startPos;
+            if (vibrating)
+                Vibrate();
+            if (pulsation)
+                Pulse();
+            if (rotate)
+                Rotate();
+        }
 
     }
 }

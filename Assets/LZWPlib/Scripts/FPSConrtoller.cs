@@ -83,24 +83,25 @@ public class FPSConrtoller : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.up, out hit, 3f))
-        {
-            if (hit.transform.GetComponent<RingScript>() != null)
-            {
-                if (GetComponent<AudioSource>().clip != MasterScript.AudioItems[0])
-                {
-                    GetComponent<AudioSource>().clip = MasterScript.AudioItems[0];
-                    GetComponent<AudioSource>().Play();
-                }
-            }
-            else if (GetComponent<AudioSource>().clip != MasterScript.AudioItems[1])
-            {
-                GetComponent<AudioSource>().clip = MasterScript.AudioItems[1];
-                GetComponent<AudioSource>().Play();
-            }
+        
+        //RaycastHit hit;
+        //if (Physics.Raycast(transform.position, transform.up, out hit, 3f))
+        //{
+        //    if (hit.transform.GetComponent<RingScript>() != null)
+        //    {
+        //        if (GetComponent<AudioSource>().clip != MasterScript.master.AudioItems[0])
+        //        {
+        //            GetComponent<AudioSource>().clip = MasterScript.master.AudioItems[0];
+        //            GetComponent<AudioSource>().Play();
+        //        }
+        //    }
+        //    else if (GetComponent<AudioSource>().clip != MasterScript.master.AudioItems[1])
+        //    {
+        //        GetComponent<AudioSource>().clip = MasterScript.master.AudioItems[1];
+        //        GetComponent<AudioSource>().Play();
+        //    }
 
-            }
+        //    }
         //RotateView();
 
         // the jump state needs to read here to make sure it is not missed

@@ -5,13 +5,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using XMlParser;
 using System.Linq;
+using LZWPlib;
 public class MasterScript : MonoBehaviour
 {
-
-    public static List<GameObject> Puzzles = new List<GameObject>();
-    public static List<Vector3> placements = new List<Vector3>();
-    public static List<AudioClip> AudioItems = new List<AudioClip>();
-    public static float puzzleSize;
+    public GameObject UI;
+    public static MasterScript master;
+    public List<GameObject> Puzzles = new List<GameObject>();
+    public List<Vector3> placements = new List<Vector3>();
+    public List<AudioClip> AudioItems = new List<AudioClip>();
+    public float puzzleSize;
     private Scene scene;
     private GameObject rootScene;
     public float size;
@@ -40,18 +42,18 @@ public class MasterScript : MonoBehaviour
 
     void initializeGameObjects()
     {
-        CurrentPuzzle = Puzzles.ElementAt(0);
-        GameObject firstPuzzle = Instantiate(nextPuzzle(), new Vector3(0,0,0), CurrentPuzzle.transform.rotation);
+        //CurrentPuzzle = Puzzles.ElementAt(0);
+        GameObject firstPuzzle = (GameObject)Network.Instantiate(nextPuzzle(), new Vector3(0,0,0), CurrentPuzzle.transform.rotation, 1);
         placements.Add(firstPuzzle.transform.position);
         firstPuzzle.SetActive(true);
-        GameObject back = Instantiate(nextPuzzle(), firstPuzzle.transform.position, firstPuzzle.transform.rotation);
+        GameObject back = (GameObject)Network.Instantiate(nextPuzzle(), firstPuzzle.transform.position, firstPuzzle.transform.rotation, 1);
         back.transform.Rotate(0, 180, 0);
         back.transform.Translate(0, 0, puzzleSize);
         placements.Add(back.transform.position);
         back.SetActive(true);
 
     }
-    public static GameObject nextPuzzle()
+    public GameObject nextPuzzle()
     {
         //TODO: zwroc losowy puzel z listy
         System.Random rnd = new System.Random();
@@ -63,21 +65,32 @@ public class MasterScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        loadXml();
-        parseToGameObjects();
-        setRootScene();
-        puzzleSize = scene.PuzzleSize;
-        initializeGameObjects();
-        CurrentPuzzle = nextPuzzle();
-        Dropdown dropdown = GameObject.FindGameObjectWithTag("drop").GetComponent<Dropdown>();
-        dropdown.ClearOptions();
-        List<string> options = new List<string>();
-        if (scene.GroupCount > 20)
-            scene.GroupCount = 20;
-        for (int i = 0; i <= scene.GroupCount; i++)
-            options.Add(i.ToString());
-        dropdown.AddOptions(options);
-        //TODO: zmienic ponizsze na wstawienie pierwszego puzzla
+
+        if (LzwpManager.Instance.isServer)
+        {
+            master = this.GetComponent<MasterScript>();
+            //loadXml();
+            //parseToGameObjects();
+            //setRootScene();
+            //puzzleSize = scene.PuzzleSize;
+            puzzleSize = 27;
+            initializeGameObjects();
+            //CurrentPuzzle = nextPuzzle();
+            scene = new Scene();
+            scene.GroupCount = 4;
+
+            Dropdown dropdown = GameObject.FindGameObjectWithTag("drop").GetComponent<Dropdown>();
+            dropdown.ClearOptions();
+            List<string> options = new List<string>();
+            if (scene.GroupCount > 20)
+                scene.GroupCount = 20;
+            for (int i = 0; i <= scene.GroupCount; i++)
+                options.Add(i.ToString());
+
+            dropdown.AddOptions(options);
+        }
+        else
+            UI.SetActive(false);      //TODO: zmienic ponizsze na wstawienie pierwszego puzzla
         /* for (int i =0; i < 10; i++)
          {
              GameObject nowytunel = Instantiate(tunnel);
@@ -95,5 +108,7 @@ public class MasterScript : MonoBehaviour
     void Update()
     {
 
+        if (Input.GetKeyDown(KeyCode.Space))
+                UI.SetActive(!UI.activeSelf);
     }
 }

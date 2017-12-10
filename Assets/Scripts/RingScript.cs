@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using LZWPlib;
 public class RingScript : MonoBehaviour {
     public enum direction
     {
@@ -23,19 +23,22 @@ public class RingScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (right)
-            transform.Rotate( speed * Time.deltaTime, 0, 0);
-        else
-            transform.Rotate(-1*speed * Time.deltaTime, 0, 0);
+        if (LzwpManager.Instance.isServer)
+        {
+            if (right)
+                transform.Rotate(speed * Time.deltaTime, 0, 0);
+            else
+                transform.Rotate(-1 * speed * Time.deltaTime, 0, 0);
+        }
     }
 
     void createNextPuzzle()
     {
-
+        
         GameObject positionMarker = new GameObject();
-        positionMarker.transform.position=transform.parent.transform.position;
+        positionMarker.transform.position = transform.parent.transform.position;
         positionMarker.transform.rotation = transform.parent.transform.rotation;
-            //transform.parent.transform.position, transform.parent.transform.rotation);
+        //transform.parent.transform.position, transform.parent.transform.rotation);
         bool exists = false;
         if (dir == direction.Down)
         {
@@ -49,8 +52,8 @@ public class RingScript : MonoBehaviour {
         {
             positionMarker.transform.Rotate(0, -90, 0);
         }
-        positionMarker.transform.Translate(0,0,MasterScript.puzzleSize);
-        foreach (var place in MasterScript.placements)
+        positionMarker.transform.Translate(0, 0, MasterScript.master.puzzleSize);
+        foreach (var place in MasterScript.master.placements)
         {
             if (place == positionMarker.transform.position)
                 exists = true;
@@ -58,19 +61,21 @@ public class RingScript : MonoBehaviour {
         if (!exists)
         {
 
-            GameObject newPuzzle = Instantiate(MasterScript.nextPuzzle(), positionMarker.transform.position, positionMarker.transform.rotation);
-            MasterScript.placements.Add(newPuzzle.transform.position);
+            GameObject newPuzzle = (GameObject)Network.Instantiate(MasterScript.master.nextPuzzle(), positionMarker.transform.position, positionMarker.transform.rotation, 1);
+            MasterScript.master.placements.Add(newPuzzle.transform.position);
             newPuzzle.SetActive(true);
         }
         Destroy(positionMarker);
     }
     void OnTriggerEnter(Collider other)
     {
-
-        if (CreateNext)
+        if (LzwpManager.Instance.isServer)
         {
-            CreateNext = false;
-            createNextPuzzle();
+            if (CreateNext)
+            {
+                CreateNext = false;
+                createNextPuzzle();
+            }
         }
     }
 }

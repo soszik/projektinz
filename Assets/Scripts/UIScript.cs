@@ -17,7 +17,9 @@ public class UIScript : MonoBehaviour {
                 RingScript script = a.GetComponent<RingScript>();
                 if (script != null)
                 {
-                    script.speed = float.Parse(this.GetComponent<InputField>().text);
+                    float newspeed;
+                    if (float.TryParse(this.GetComponent<InputField>().text, out newspeed))
+                        script.speed = newspeed;
                 }
             }
             else
@@ -25,90 +27,92 @@ public class UIScript : MonoBehaviour {
                 FlyingObjectScript script = a.GetComponent<FlyingObjectScript>();
                 if (script != null)
                 {
-                    switch (parameter)
-                    {
-                        case "bs":
-                            script.bezierSpeed = Int32.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "vfx":
-                            script.vibrationFrequency.x = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "vfy":
-                            script.vibrationFrequency.y = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "vfz":
-                            script.vibrationFrequency.z = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "vax":
-                            script.vibrationAmplitude.x = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "vay":
-                            script.vibrationAmplitude.y = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "vaz":
-                            script.vibrationAmplitude.z = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "pfx":
-                            script.pulsationFrequency.x = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "pfy":
-                            script.pulsationFrequency.y = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "pfz":
-                            script.pulsationFrequency.z = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "pamaxx":
-                            script.pulsationAmplitudeMax.x = float.Parse(this.GetComponent<InputField>().text);
-                            script.calculateDiff();
-                            break;
-                        case "pamaxy":
-                            script.pulsationAmplitudeMax.y = float.Parse(this.GetComponent<InputField>().text);
-                            script.calculateDiff();
-                            break;
-                        case "pamaxz":
-                            script.pulsationAmplitudeMax.z = float.Parse(this.GetComponent<InputField>().text);
-                            script.calculateDiff();
-                            break;
-                        case "paminx":
-                            script.pulsationAmplitudeMin.x = float.Parse(this.GetComponent<InputField>().text);
-                            script.calculateDiff();
-                            break;
-                        case "paminy":
-                            script.pulsationAmplitudeMin.y = float.Parse(this.GetComponent<InputField>().text);
-                            script.calculateDiff();
-                            break;
-                        case "paminz":
-                            script.pulsationAmplitudeMin.z = float.Parse(this.GetComponent<InputField>().text);
-                            script.calculateDiff();
-                            break;
-                        case "rsx":
-                            script.rotationSpeed.x = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "rsy":
-                            script.rotationSpeed.y = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "rsz":
-                            script.rotationSpeed.z = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "rmaxx":
-                            script.rotationMax.x = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "rmaxy":
-                            script.rotationMax.y = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "rmaxz":
-                            script.rotationMax.z = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "rminx":
-                            script.rotationMin.x = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "rminy":
-                            script.rotationMin.y = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                        case "rminz":
-                            script.rotationMin.z = float.Parse(this.GetComponent<InputField>().text);
-                            break;
-                    }
+                    float newPar;
+                    if (float.TryParse(this.GetComponent<InputField>().text, out newPar))
+                        switch (parameter)
+                        {
+                            case "bs":
+                                script.bezierSpeed = (int)newPar;
+                                break;
+                            case "vfx":
+                                script.vibrationFrequency.x = newPar;
+                                break;
+                            case "vfy":
+                                script.vibrationFrequency.y = newPar;
+                                break;
+                            case "vfz":
+                                script.vibrationFrequency.z = newPar;
+                                break;
+                            case "vax":
+                                script.vibrationAmplitude.x = newPar;
+                                break;
+                            case "vay":
+                                script.vibrationAmplitude.y = newPar;
+                                break;
+                            case "vaz":
+                                script.vibrationAmplitude.z = newPar;
+                                break;
+                            case "pfx":
+                                script.pulsationFrequency.x = newPar;
+                                break;
+                            case "pfy":
+                                script.pulsationFrequency.y = newPar;
+                                break;
+                            case "pfz":
+                                script.pulsationFrequency.z = newPar;
+                                break;
+                            case "pamaxx":
+                                script.pulsationAmplitudeMax.x = newPar;
+                                script.calculateDiff();
+                                break;
+                            case "pamaxy":
+                                script.pulsationAmplitudeMax.y = newPar;
+                                script.calculateDiff();
+                                break;
+                            case "pamaxz":
+                                script.pulsationAmplitudeMax.z = newPar;
+                                script.calculateDiff();
+                                break;
+                            case "paminx":
+                                script.pulsationAmplitudeMin.x = newPar;
+                                script.calculateDiff();
+                                break;
+                            case "paminy":
+                                script.pulsationAmplitudeMin.y = newPar;
+                                script.calculateDiff();
+                                break;
+                            case "paminz":
+                                script.pulsationAmplitudeMin.z = newPar;
+                                script.calculateDiff();
+                                break;
+                            case "rsx":
+                                script.rotationSpeed.x = newPar;
+                                break;
+                            case "rsy":
+                                script.rotationSpeed.y = newPar;
+                                break;
+                            case "rsz":
+                                script.rotationSpeed.z = newPar;
+                                break;
+                            case "rmaxx":
+                                script.rotationMax.x = newPar;
+                                break;
+                            case "rmaxy":
+                                script.rotationMax.y = newPar;
+                                break;
+                            case "rmaxz":
+                                script.rotationMax.z = newPar;
+                                break;
+                            case "rminx":
+                                script.rotationMin.x = newPar;
+                                break;
+                            case "rminy":
+                                script.rotationMin.y = newPar;
+                                break;
+                            case "rminz":
+                                script.rotationMin.z = newPar;
+                                break;
+                        }
                 }
             }
         }
