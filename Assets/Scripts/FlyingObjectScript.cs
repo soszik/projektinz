@@ -33,7 +33,8 @@ public class FlyingObjectScript : MonoBehaviour {
 
     public void ChangeGroupNumber(int number)
     {
-        this.group = number;
+        group = number;
+        transform.tag = "Grupa " + group.ToString();
     }
     void Vibrate()
     {

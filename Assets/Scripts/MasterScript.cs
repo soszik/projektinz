@@ -16,17 +16,16 @@ public class MasterScript : MonoBehaviour
     public List<AudioClip> AudioItems = new List<AudioClip>();
     public float puzzleSize;
     private Scene scene;
-    private GameObject rootScene;
-    public float size;
-    public static GameObject CurrentPuzzle;
-    public GameObject NextPuzlle;
-    enum Mode
+    public GameObject horizon;
+    public GameObject player;
+    public Camera left, right;
+    public enum Mode
     {
         Tunnel,
         OpenSpace
     }
     //TODO w xml jako atr sceny
-    private Mode environment = Mode.Tunnel;
+    public Mode environment = Mode.Tunnel;
     
     void loadXml()
     {
@@ -37,23 +36,20 @@ public class MasterScript : MonoBehaviour
         XMLToGameObjectParser.XMLToGameObjects(scene, ref Puzzles, ref placements, ref AudioItems,
                                                 ref SmallObjects);
     }
-    void setRootScene()
-    {
-        rootScene = XMLToGameObjectParser.getRootScene();
-    }
 
     void initializeGameObjects()
     {
-        //CurrentPuzzle = Puzzles.ElementAt(0);
-        GameObject firstPuzzle = (GameObject)Network.Instantiate(nextPuzzle(), new Vector3(0,0,0), CurrentPuzzle.transform.rotation, 1);
-        placements.Add(firstPuzzle.transform.position);
-        firstPuzzle.SetActive(true);
-        GameObject back = (GameObject)Network.Instantiate(nextPuzzle(), firstPuzzle.transform.position, firstPuzzle.transform.rotation, 1);
-        back.transform.Rotate(0, 180, 0);
-        back.transform.Translate(0, 0, puzzleSize);
-        placements.Add(back.transform.position);
-        back.SetActive(true);
-      
+        if (environment == Mode.Tunnel)
+        {
+            GameObject firstPuzzle = (GameObject)Network.Instantiate(nextPuzzle(), new Vector3(0, 0, 0), new Quaternion(), 1);
+            placements.Add(firstPuzzle.transform.position);
+            GameObject back = (GameObject)Network.Instantiate(nextPuzzle(), firstPuzzle.transform.position, firstPuzzle.transform.rotation, 1);
+            back.transform.Rotate(0, 180, 0);
+            back.transform.Translate(0, 0, puzzleSize);
+            placements.Add(back.transform.position);
+        }
+        else
+            Network.Instantiate(horizon, new Vector3(0, 0, 0), new Quaternion(), 1);
 
     }
     public GameObject nextPuzzle()
@@ -61,8 +57,7 @@ public class MasterScript : MonoBehaviour
         //TODO: zwroc losowy puzel z listy
         System.Random rnd = new System.Random();
         int index = rnd.Next(Puzzles.Count);
-        CurrentPuzzle = Puzzles.ElementAt(index);
-        return CurrentPuzzle;
+        return Puzzles.ElementAt(index);
     }
     public GameObject tunnel;
     // Use this for initialization
@@ -74,15 +69,13 @@ public class MasterScript : MonoBehaviour
             master = this.GetComponent<MasterScript>();
             loadXml();
             parseToGameObjects();
-            //parseToGameObjects();
-            //setRootScene();
-            //puzzleSize = scene.PuzzleSize;
-            puzzleSize = 27;
+            puzzleSize = scene.PuzzleSize;
+            if (scene.Type == "Tunnel")
+                environment = Mode.Tunnel;
+            else
+                environment = Mode.OpenSpace;
             initializeGameObjects();
-            //CurrentPuzzle = nextPuzzle();
-            scene = new Scene();
-            scene.GroupCount = 4;
-
+            
             Dropdown dropdown = GameObject.FindGameObjectWithTag("drop").GetComponent<Dropdown>();
             dropdown.ClearOptions();
             List<string> options = new List<string>();
@@ -92,6 +85,29 @@ public class MasterScript : MonoBehaviour
                 options.Add(i.ToString());
 
             dropdown.AddOptions(options);
+            if (environment == Mode.OpenSpace)
+            {
+                left.clearFlags = CameraClearFlags.Skybox;
+                right.clearFlags = CameraClearFlags.Skybox;
+                left.farClipPlane = 50000;
+                right.farClipPlane = 50000;
+                FPSConrtoller controller = player.GetComponent<FPSConrtoller>();
+                controller.m_GravityMultiplier = 0;
+                player.transform.Translate(0, 50, 0);
+                foreach(GameObject a in GameObject.FindObjectsOfType(typeof(GameObject)))
+                {
+                    FlyingObjectScript script = a.GetComponent<FlyingObjectScript>();
+                    if (script != null)
+                    {
+                        a.transform.Translate(new Vector3(0, 50, 0), Space.World);
+                        controller.flyingObjects.Add(a);
+                        for (int i = 0; i < script.bezierPoints.Count; i++)
+                        {
+                            script.bezierPoints[i] = new Vector3(script.bezierPoints[i].x, script.bezierPoints[i].y+50, script.bezierPoints[i].z);
+                        }
+                    }
+                }
+            }
         }
         else
             UI.SetActive(false);      

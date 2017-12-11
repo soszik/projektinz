@@ -64,10 +64,11 @@ namespace Assets.Scripts.XMLToGameObjectParser
                     {
                         SmallObjects.ElementAt(i).transform.position = new Vector3(smallObjToSet.bezierPoints.ElementAt(0)[0],
                             (float)smallObjToSet.bezierPoints.ElementAt(0)[1], (float)smallObjToSet.bezierPoints.ElementAt(0)[2]);
-                        var comp = SmallObjects.ElementAt(i).AddComponent<FlyingObjectScript>() as FlyingObjectScript;
-                        setFlyingScriptProperties(ref comp, smallObjToSet);
-                        Network.Instantiate(SmallObjects.ElementAt(i), SmallObjects.ElementAt(i).transform.position,
+                        
+                        GameObject nowy = (GameObject)Network.Instantiate(SmallObjects.ElementAt(i), SmallObjects.ElementAt(i).transform.position,
                             SmallObjects.ElementAt(i).transform.rotation, 1);
+                        var comp = nowy.GetComponent<FlyingObjectScript>();
+                        setFlyingScriptProperties(ref comp, smallObjToSet);
                     }
                 }
             }

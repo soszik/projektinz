@@ -12,7 +12,7 @@ public class FPSConrtoller : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] private float m_RunstepLenghten;
     [SerializeField] private float m_JumpSpeed;
     [SerializeField] private float m_StickToGroundForce;
-    [SerializeField] private float m_GravityMultiplier;
+    [SerializeField] public float m_GravityMultiplier;
     [SerializeField] private bool m_UseFovKick;
     [SerializeField] private bool m_UseHeadBob;
     [SerializeField] private float m_StepInterval;
@@ -33,7 +33,7 @@ public class FPSConrtoller : MonoBehaviour
     public float moveSpeed = 0.1f;
     public float moveThreshold = 0.03f;
     public float lookSensitivity = 3.0f;
-
+    public List<GameObject> flyingObjects = new List<GameObject>();
 
     [Header("In editor")]
     public float cameraSensitivity = 90;
@@ -83,27 +83,48 @@ public class FPSConrtoller : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        
-        //RaycastHit hit;
-        //if (Physics.Raycast(transform.position, transform.up, out hit, 3f))
-        //{
-        //    if (hit.transform.GetComponent<RingScript>() != null)
-        //    {
-        //        if (GetComponent<AudioSource>().clip != MasterScript.master.AudioItems[0])
-        //        {
-        //            GetComponent<AudioSource>().clip = MasterScript.master.AudioItems[0];
-        //            GetComponent<AudioSource>().Play();
-        //        }
-        //    }
-        //    else if (GetComponent<AudioSource>().clip != MasterScript.master.AudioItems[1])
-        //    {
-        //        GetComponent<AudioSource>().clip = MasterScript.master.AudioItems[1];
-        //        GetComponent<AudioSource>().Play();
-        //    }
 
-        //    }
+        if (MasterScript.master.environment == MasterScript.Mode.Tunnel)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.up, out hit, 3f))
+            {
+                if (hit.transform.GetComponent<RingScript>() != null)
+                {
+                    if (GetComponent<AudioSource>().clip != MasterScript.master.AudioItems[0])
+                    {
+                        GetComponent<AudioSource>().clip = MasterScript.master.AudioItems[0];
+                        GetComponent<AudioSource>().Play();
+                    }
+                }
+                else if (GetComponent<AudioSource>().clip != MasterScript.master.AudioItems[1])
+                {
+                    GetComponent<AudioSource>().clip = MasterScript.master.AudioItems[1];
+                    GetComponent<AudioSource>().Play();
+                }
+
+            }
+        }
+        else if (GetComponent<AudioSource>().clip != MasterScript.master.AudioItems[0])
+        {
+            GetComponent<AudioSource>().clip = MasterScript.master.AudioItems[0];
+            GetComponent<AudioSource>().Play();
+        }
         //RotateView();
-
+        if (MasterScript.master.environment == MasterScript.Mode.OpenSpace)
+        {
+            Vector3 displacement = new Vector3(transform.position.x, 0, transform.position.z);
+            transform.position = new Vector3(0, transform.position.y, 0);
+            foreach (GameObject a in flyingObjects)
+            {
+                a.transform.position = new Vector3(a.transform.position.x - displacement.x, a.transform.position.y, a.transform.position.z - displacement.z);
+                FlyingObjectScript script = a.GetComponent<FlyingObjectScript>();
+                for (int i =0; i < script.bezierPoints.Count; i++)
+                {
+                    script.bezierPoints[i]= new Vector3(script.bezierPoints[i].x - displacement.x, script.bezierPoints[i].y, script.bezierPoints[i].z-displacement.z);
+                }
+            }
+        }
         // the jump state needs to read here to make sure it is not missed
         if (!m_Jump)
         {
