@@ -93,7 +93,7 @@ public class MasterScript : MonoBehaviour
                 right.farClipPlane = 50000;
                 FPSConrtoller controller = player.GetComponent<FPSConrtoller>();
                 controller.m_GravityMultiplier = 0;
-                player.transform.Translate(0, 50, 0);
+                player.transform.Translate(0, 51, 0);
                 foreach(GameObject a in GameObject.FindObjectsOfType(typeof(GameObject)))
                 {
                     FlyingObjectScript script = a.GetComponent<FlyingObjectScript>();
